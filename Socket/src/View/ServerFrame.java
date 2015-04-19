@@ -3,24 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package socketExample;
+package View;
 
-import java.io.IOException;
+import MiddleWare.ServerMiddle;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
-import weatherExample.Wait;
 
 /**
  *
  * @author Allan
  */
-public class InitServer extends javax.swing.JFrame {
+public class ServerFrame extends javax.swing.JFrame {
 
     
     
@@ -33,88 +30,33 @@ public class InitServer extends javax.swing.JFrame {
     private ObjectInputStream input;
     private Socket connection;
 
+    
+    ServerMiddle serverM;
     /**
      * Creates new form InitServer
      */
-    public InitServer() {
+    public ServerFrame() {
         
         initComponents();
         setLocationRelativeTo(null);
+        serverM = new ServerMiddle();
     }
     
     
     public void checkSocketServer(){
-         try{
-             
-            serverx = new ServerSocket(port, aam);
-             System.out.println("Socket Server Creado");
-         
-         }
-         catch(Exception e){
-           System.out.println("Ya existe ~Socket Server Creado");
-         }
+         serverM.serverFrame_MCheckSocket(txtPort, txtAAM, label_connect);
      }
     
     ///////////////////////////////////////
     
     public boolean checkOutputRequest() {
-        try {
-            output = new ObjectOutputStream(connection.getOutputStream());
-            output.flush();
-            input = new ObjectInputStream(connection.getInputStream());
-            return true;
-        } catch (Exception e) {
-            
-            showMessage("Desconectado!");
-            return false;
-        }
+        return serverM.serverFrame_MCheckStreams();
     }
 
 
-    public void hiloConnect(){
-        
-        thread = new Thread() {
-            @Override
-            public void run() {
-               
-                try {
-                    checkSocketServer();
-                    showMessage("Waiting for connection");
-                    connection = serverx.accept();
-                  // Sho("Waiting" + connection.getInetAddress().getHostName());
-
-                    boolean checkOR = false;
-                    while (true) {
-                        checkOR = checkOutputRequest();
-                      
-                        System.out.println("Now Connected!");
-                       
-                        String message = null;
-                        while (true) {
-                            message = (String) input.readObject();
-                            showMessage(message);
-                        }
-                    }
-
-                    
-                } catch (Exception ex) {
-                 showMessage("Disconnect" + connection.getInetAddress().getHostName());  
-                    run();
-                }
-            }
-        };
-    }
     
-    private void showMessage(final String text){
-        SwingUtilities.invokeLater( new Runnable() {
-
-            @Override
-            public void run() {
-
-            list1.add(text);
-            }
-        });
-    }
+    
+    
     
     
     /**
@@ -129,9 +71,10 @@ public class InitServer extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txtPort = new javax.swing.JTextField();
+        txtAAM = new javax.swing.JTextField();
         list1 = new java.awt.List();
+        label_connect = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -146,9 +89,13 @@ public class InitServer extends javax.swing.JFrame {
 
         jLabel2.setText("Cantidad Operaciones:");
 
-        jTextField1.setText("6789");
+        txtPort.setText("6789");
 
-        jTextField2.setText("100");
+        txtAAM.setText("100");
+
+        label_connect.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        label_connect.setForeground(new java.awt.Color(0, 0, 255));
+        label_connect.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -158,19 +105,21 @@ public class InitServer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(list1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 185, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28))))
+                            .addComponent(txtAAM, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(label_connect, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(list1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,13 +130,15 @@ public class InitServer extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAAM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(list1, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(label_connect, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -197,8 +148,8 @@ public class InitServer extends javax.swing.JFrame {
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        // checkSocketServer();
-        hiloConnect();
-        thread.start();
+       serverM.createXAjax(list1, txtPort, txtAAM, label_connect);
+      
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -218,20 +169,21 @@ public class InitServer extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InitServer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InitServer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InitServer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InitServer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                InitServer dialog = new InitServer();
+                ServerFrame dialog = new ServerFrame();
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -247,8 +199,9 @@ public class InitServer extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel label_connect;
     private java.awt.List list1;
+    private javax.swing.JTextField txtAAM;
+    private javax.swing.JTextField txtPort;
     // End of variables declaration//GEN-END:variables
 }

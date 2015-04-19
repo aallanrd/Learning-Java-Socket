@@ -14,16 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package socketExample;
+package View;
 
+import MiddleWare.ClientMiddle;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,52 +27,39 @@ import java.util.logging.Logger;
  *
  * @author Allan
  */
-public class JavaSocket extends javax.swing.JFrame {
+public class ClientFrame extends javax.swing.JFrame {
 
+    
+    ClientMiddle clientMiddle;
     /**
      * Creates new form JavaSocket
      */
-    public JavaSocket() throws IOException {
+    public ClientFrame() {
         initComponents();
-        jTextField1.setText("127.0.0.1");
-        jTextField2.setText("6789");
-        setLocationRelativeTo(this);
-        
-       jComboBox1.addItemListener(new ItemChangeListener());
-        
-        
+        gettingReady();
         
     }
-    
+    //===============================================
+    private void gettingReady(){
+        
+        txtIP.setText("127.0.0.1");
+        txtPort.setText("6789");
+        clientMiddle = new ClientMiddle();
+        setLocationRelativeTo(this);
+        jComboBox1.addItemListener(new ItemChangeListener());
+        
+    }
+    //=====================================================
     class ItemChangeListener implements ItemListener{
     @Override
     public void itemStateChanged(ItemEvent event) {
        if (event.getStateChange() == ItemEvent.SELECTED) {
           Object item = event.getItem();
-          jTextField1.setText(item.toString());
-          // do something with object
+          txtIP.setText(item.toString());
+          
        }
     }       
 }
-    
-//    private boolean gettingReady() throws IOException{
-//        try{connection =  new Socket(InetAddress.getByName(serverIP),portNumber);
-//        output = new ObjectOutputStream(connection.getOutputStream());
-//        output.flush();
-//        input =  new ObjectInputStream(connection.getInputStream());
-//        return true;}
-//        catch(Exception e){
-//            label_connect.setText("Must Open The Server First");
-//            return false;
-//        }
-//    }
-    
-    private ObjectOutput output;
-    private ObjectInputStream input;
-    private String message = "";
-    private int portNumber = 6789;
-    private String serverIP = "127.0.0.1";
-    private Socket connection;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -87,31 +70,31 @@ public class JavaSocket extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
+        txtIP = new javax.swing.JTextField();
+        btnTest_Server = new javax.swing.JButton();
+        txtPort = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         label_connect = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jTextField3 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        txtMessage = new javax.swing.JTextField();
+        btnSend_Message = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         list1 = new java.awt.List();
-        jButton3 = new javax.swing.JButton();
+        btnClose_Connect = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("IP To Connect:");
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        txtIP.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Test Connection");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnTest_Server.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        btnTest_Server.setText("Test Connection");
+        btnTest_Server.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnTest_ServerActionPerformed(evt);
             }
         });
 
@@ -123,21 +106,21 @@ public class JavaSocket extends javax.swing.JFrame {
 
         jLabel3.setText("Send Something to The Server:");
 
-        jTextField3.setText("\"I wanna send this line\"");
+        txtMessage.setText("\"I wanna send this line\"");
 
-        jButton2.setText("Send");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnSend_Message.setText("Send");
+        btnSend_Message.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnSend_MessageActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Sending History:");
 
-        jButton3.setText("Close");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnClose_Connect.setText("Close");
+        btnClose_Connect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnClose_ConnectActionPerformed(evt);
             }
         });
 
@@ -161,12 +144,12 @@ public class JavaSocket extends javax.swing.JFrame {
                                     .addComponent(jLabel2))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2)
+                                    .addComponent(txtPort)
                                     .addComponent(jComboBox1, 0, 169, Short.MAX_VALUE)))
-                            .addComponent(jTextField1))
+                            .addComponent(txtIP))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
-                    .addComponent(jTextField3)
+                        .addComponent(btnTest_Server, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
+                    .addComponent(txtMessage)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -175,8 +158,8 @@ public class JavaSocket extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(btnSend_Message, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnClose_Connect, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -188,26 +171,26 @@ public class JavaSocket extends javax.swing.JFrame {
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
+                    .addComponent(btnTest_Server, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtIP, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(btnSend_Message)
                 .addGap(14, 14, 14)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
-                .addComponent(jButton3)
+                .addComponent(btnClose_Connect)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(label_connect, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -215,61 +198,18 @@ public class JavaSocket extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        try {
-            connection = null;
-            //Getting new Values
-            serverIP = jTextField1.getText();
-            portNumber = Integer.parseInt(jTextField2.getText());
+    private void btnTest_ServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTest_ServerActionPerformed
+         
+       clientMiddle.clientFrame_MTest(txtIP, txtPort, label_connect, btnTest_Server);
+    }//GEN-LAST:event_btnTest_ServerActionPerformed
 
-            //New Connection
-           
-            connection = new Socket(InetAddress.getByName(serverIP), portNumber);
-            
-            output = new ObjectOutputStream(connection.getOutputStream());
-            
-            output.flush();
-            System.out.println("Ready OutputFlush");
-           // input = new ObjectInputStream(connection.getInputStream());
-           // System.out.println("Ready Input");
-            label_connect.setText("Connection Succesfull! Connected to" + serverIP);
-            jButton1.setEnabled(false);
+    private void btnSend_MessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSend_MessageActionPerformed
+        clientMiddle.clientFrame_MSendM(txtMessage, label_connect);
+    }//GEN-LAST:event_btnSend_MessageActionPerformed
 
-        } catch (NumberFormatException | IOException ex) {
-
-
-           
-            label_connect.setText("Cant connect : Error A0001 : Can't Connect To Server" );
-       
-        } 
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         try{
-            message = jTextField3.getText();
-            output.writeObject("\nSERVER - "+ message + "\n");
-            output.flush();
-          //  showMessage("\n SERVER -" + message+ "\n");
-            
-        }catch(Exception e){
-            label_connect.setText("Error : Cant Send Message");
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        try {
-            
-            output.close();
-          //  input.close();
-            connection.close();
-            label_connect.setText("Connection Closed");
-           jButton1.setEnabled(true);
-            
-        } catch (Exception e) {
-          label_connect.setText("Error : Cant Close The CLient");
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnClose_ConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose_ConnectActionPerformed
+        clientMiddle.clientFrame_MCloseC(label_connect,btnTest_Server);
+    }//GEN-LAST:event_btnClose_ConnectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -287,44 +227,36 @@ public class JavaSocket extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JavaSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JavaSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JavaSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JavaSocket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ClientFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new JavaSocket().setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(JavaSocket.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ClientFrame().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnClose_Connect;
+    private javax.swing.JButton btnSend_Message;
+    private javax.swing.JButton btnTest_Server;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel label_connect;
     private java.awt.List list1;
+    private javax.swing.JTextField txtIP;
+    private javax.swing.JTextField txtMessage;
+    private javax.swing.JTextField txtPort;
     // End of variables declaration//GEN-END:variables
 
  
