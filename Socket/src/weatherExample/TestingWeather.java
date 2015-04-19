@@ -1,13 +1,21 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2015 Allan Rojas.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package weatherExample;
 
-import it.octograve.weatherlib.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 /**
  *
@@ -23,69 +31,7 @@ public class TestingWeather extends javax.swing.JFrame {
         initComponents();
         this.frame = this;
     }
-   
-    Wait waitW;
-    String location;
-    
-    Thread thread2;
-    Thread thread;
-
-    //==========================================
-
-    public void createThreads() {
-        //========================================
-        thread = new Thread() {
-            @Override
-            public void run() {
-                waitW = new Wait(frame, true);
-                waitW.setVisible(true);
-            }
-        };
-   //===========================================
-
-        thread2 = new Thread() {
-            @Override
-            public void run() {
-
-                try {
-                    fetchStation();
-                    waitW.setVisible(false);
-                    thread.stop();
-                    thread2.stop();
-                } catch (WeatherException ex) {
-                    Logger.getLogger(TestingWeather.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        };
-    }
-
-   //=======================================
-    private void fetchStation() throws WeatherException {
-
-        StationsList list = null;
-        try {
-            list = StationsList.fetchStationsList();
-        } catch (WeatherException e) {
-            jTextArea1.append(
-                    "\nUnable to fetch stations list."
-            );
-
-        }
-        //====================================================
-        Station station = list.getByLocation(location);
-        if (station == null) {
-            jTextArea1.append("\n'" + location
-                    + "' is not a valid location");
-
-        } //=======================================================
-        else {
-            station.updateWeather();
-            jTextArea1.append("\nWeather informations for " + station.getLocation());
-            jTextArea1.append("\n Fecha :" + station.getWeather().toVerboseString());
-        }
-    }
-
-
+  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -149,13 +95,11 @@ public class TestingWeather extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 try{
         jTextArea1.setText("");
+        WeatherMethods wM = new WeatherMethods();
         
-        
-        createThreads();
-        
-        thread.start();
-        location = jTextField1.getText();
-        thread2.start();
+        wM.createThreads(frame, jTextArea1, jTextField1.getText());
+        wM.thread.start();
+        wM.thread2.start();
 }
 catch(Exception e){
     
