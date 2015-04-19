@@ -15,6 +15,7 @@ public class ModelTemperatura extends Object{
     
     String temperatura;
     Date fecha;
+    String change;
 
     public ModelTemperatura() {
     }
