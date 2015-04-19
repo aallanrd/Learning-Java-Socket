@@ -87,7 +87,8 @@ public class ServerClass {
                     }
                 } catch (IOException | ClassNotFoundException ex) {
                     showMessage("Disconnected", list);
-                    start();
+                    startListeningPort(list, port, aam);
+                    thread.start();
                 }
             }
         };
