@@ -102,7 +102,7 @@ public class Server extends JFrame{
     
         showMessage("Waiting for someone to connect...");
          connection = serverx.accept();
-         showMessage("Now Connected To:" + connection.getInetAddress().getHostName());
+         showMessage("Now Connected To: " + connection.getInetAddress().getHostName());
          
     }
     private void setUpStreams() throws IOException{
@@ -126,7 +126,9 @@ public class Server extends JFrame{
                message = (String ) input.readObject();
                showMessage( message);
            }catch(Exception e ){
-               showMessage("\nDont Know What I Send");
+              // showMessage("\nDont Know What I Send");
+               message = "CLIENT - END";
+               closerCrap();
            }
        }
        while(!message.equals("CLIENT - END"));
