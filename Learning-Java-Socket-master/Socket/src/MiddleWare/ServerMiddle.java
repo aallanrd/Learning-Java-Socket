@@ -18,6 +18,7 @@ package MiddleWare;
 
 import Controller.ServerClass;
 import java.awt.List;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -61,4 +62,8 @@ public class ServerMiddle {
         server.startListeningPort(list, port, aam);
         server.thread.start();
     }    
+    
+    //==========================================================================
+    
+    
 }

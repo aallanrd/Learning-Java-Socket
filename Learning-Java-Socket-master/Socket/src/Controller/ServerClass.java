@@ -24,7 +24,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import javax.swing.SwingUtilities;
-
+import Model.ModelTemperatura;
 /**
  *
  * @author Allan
@@ -71,6 +71,8 @@ public class ServerClass {
     public void startListeningPort(List list, int port, int aam) {
 
         thread = new Thread() {
+            
+            int reading = 0;
             @Override
             public void run() {
                 try {
@@ -78,7 +80,9 @@ public class ServerClass {
                     showMessage("Waiting for connection", list);
                     connection = serverx.accept();
                     while (true) {
+                        
                         checkOutputRequest();
+                        
                         showMessage("Now Connected!", list);
                         while (true) {
                             String message = (String) input.readObject();
@@ -87,6 +91,8 @@ public class ServerClass {
                     }
                 } catch (IOException | ClassNotFoundException ex) {
                     showMessage("Disconnected", list);
+                    closeAssist();
+                    
                     startListeningPort(list, port, aam);
                     thread.start();
                 }
@@ -98,6 +104,16 @@ public class ServerClass {
         SwingUtilities.invokeLater(() -> {
             list1.add(text);
         });
+    }
+    
+    private void closeAssist(){
+        try{
+           output.close();
+           connection.close();
+          
+        }catch(Exception e){
+            
+        }
     }
     
     

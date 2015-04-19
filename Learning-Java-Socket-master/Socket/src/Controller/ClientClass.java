@@ -21,6 +21,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Date;
 
 /**
  *
@@ -48,8 +49,11 @@ public class ClientClass {
     public boolean SendMessageToServer(String message){
          try{
             
+             
+             
+          //  output.writeObject(new Model.ModelTemperatura("18,7", new Date("26/02/1991")));
             output.writeObject(message);
-            output.flush();
+             output.flush();
             return true;
             
         }catch(Exception e){

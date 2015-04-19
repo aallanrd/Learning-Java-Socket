@@ -20,8 +20,10 @@ import MiddleWare.ClientMiddle;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
 
 /**
  *
@@ -47,7 +49,7 @@ public class ClientFrame extends javax.swing.JFrame {
         clientMiddle = new ClientMiddle();
         setLocationRelativeTo(this);
         jComboBox1.addItemListener(new ItemChangeListener());
-        
+      
     }
     //=====================================================
     class ItemChangeListener implements ItemListener{
@@ -60,6 +62,30 @@ public class ClientFrame extends javax.swing.JFrame {
        }
     }       
 }
+    Thread thread;
+    public void createTh(){
+     
+        thread = new Thread() {
+            
+            int reading = 0;
+            
+            @Override
+            public void run() {
+                try {
+                    while(true){ 
+                      Random random = new Random();  
+                      JTextField jtext = new JTextField();
+                      jtext.setText("Testing:   - "+ random.nextInt(21));
+                      sleep(1000);
+                      clientMiddle.clientFrame_MSendM(jtext, label_connect);
+                    }
+                }catch(Exception e){
+             
+             }
+             }
+         };
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -83,6 +109,7 @@ public class ClientFrame extends javax.swing.JFrame {
         list1 = new java.awt.List();
         btnClose_Connect = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -126,6 +153,13 @@ public class ClientFrame extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "127.0.0.1", "192.168.0.4" }));
 
+        jButton1.setText("Send Random Stuff");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -151,15 +185,17 @@ public class ClientFrame extends javax.swing.JFrame {
                         .addComponent(btnTest_Server, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
                     .addComponent(txtMessage)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                        .addComponent(jLabel3)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSend_Message, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnClose_Connect, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(btnClose_Connect, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -182,11 +218,14 @@ public class ClientFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSend_Message)
-                .addGap(14, 14, 14)
-                .addComponent(jLabel4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSend_Message)
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel4))
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
@@ -201,6 +240,8 @@ public class ClientFrame extends javax.swing.JFrame {
     private void btnTest_ServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTest_ServerActionPerformed
          
        clientMiddle.clientFrame_MTest(txtIP, txtPort, label_connect, btnTest_Server);
+       
+      
     }//GEN-LAST:event_btnTest_ServerActionPerformed
 
     private void btnSend_MessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSend_MessageActionPerformed
@@ -209,7 +250,28 @@ public class ClientFrame extends javax.swing.JFrame {
 
     private void btnClose_ConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose_ConnectActionPerformed
         clientMiddle.clientFrame_MCloseC(label_connect,btnTest_Server);
+       thread.stop();
     }//GEN-LAST:event_btnClose_ConnectActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        if(thread==null){
+            createTh();
+            thread.start();
+        }
+       
+        String toString = thread.getState().toString();
+       System.out.println( toString);
+       if(toString.equals("TERMINATED")){
+           
+           System.out.println("Entro Terminated");
+           thread = null;
+           createTh();
+           thread.start();
+       }else{
+         
+       }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -246,6 +308,7 @@ public class ClientFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnClose_Connect;
     private javax.swing.JButton btnSend_Message;
     private javax.swing.JButton btnTest_Server;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
