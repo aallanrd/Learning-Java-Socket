@@ -1,20 +1,26 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2015 Allan Rojas.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Controller;
 
-import java.awt.Label;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 
 /**
  *
@@ -23,14 +29,7 @@ import javax.swing.JTextField;
 public class ClientClass {
     
     private ObjectOutput output;
-    private ObjectInputStream input;
-    private String message = "";
-    private int portNumber = 6789;
-    private String serverIP = "127.0.0.1";
     private Socket connection;
-    
-    
-    
     
     //String serverIP , String portNumber
     public boolean TestConnection(String serverIP, int portNumber){
