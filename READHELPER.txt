@@ -1,0 +1,10 @@
+//=============================================================================
+Cant connect : Error A0001 : Can't Connect To Server
+:: No se puede conectar con el servidor. 
+ - Chequear IP y Puerto del Servidor al que se quiere conectar .
+ ! El server a conectar debe estar inicializado. 
+ 
+ //=============================================================================
+ 
+ 
+ 

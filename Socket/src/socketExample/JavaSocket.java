@@ -101,7 +101,7 @@ public class JavaSocket extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("IP To Connect:");
 
@@ -218,25 +218,27 @@ public class JavaSocket extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         try {
-            
+            connection = null;
             //Getting new Values
             serverIP = jTextField1.getText();
-           
             portNumber = Integer.parseInt(jTextField2.getText());
-            
-  
+
             //New Connection
+           
             connection = new Socket(InetAddress.getByName(serverIP), portNumber);
+            
             output = new ObjectOutputStream(connection.getOutputStream());
+            
             output.flush();
-            input = new ObjectInputStream(connection.getInputStream());
-          
+            System.out.println("Ready OutputFlush");
+           // input = new ObjectInputStream(connection.getInputStream());
+           // System.out.println("Ready Input");
             label_connect.setText("Connection Succesfull! Connected to" + serverIP);
             jButton1.setEnabled(false);
 
         } catch (NumberFormatException | IOException ex) {
-        
-            
+
+
            
             label_connect.setText("Cant connect : Error A0001 : Can't Connect To Server" );
        
@@ -257,9 +259,10 @@ public class JavaSocket extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
+            
             output.close();
-            input.close();
-            //connection.close();
+          //  input.close();
+            connection.close();
             label_connect.setText("Connection Closed");
            jButton1.setEnabled(true);
             
