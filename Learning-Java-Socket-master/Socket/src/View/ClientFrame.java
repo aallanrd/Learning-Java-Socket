@@ -250,7 +250,10 @@ public class ClientFrame extends javax.swing.JFrame {
 
     private void btnClose_ConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose_ConnectActionPerformed
         clientMiddle.clientFrame_MCloseC(label_connect,btnTest_Server);
-       thread.stop();
+       if(thread==null){
+           
+       }else{
+           thread.stop();}
     }//GEN-LAST:event_btnClose_ConnectActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

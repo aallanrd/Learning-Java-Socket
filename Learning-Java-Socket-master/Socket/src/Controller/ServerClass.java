@@ -76,9 +76,15 @@ public class ServerClass {
             @Override
             public void run() {
                 try {
-                    checkSocketServer(port, aam);
+                    boolean checkSocketServer = checkSocketServer(port, aam);
                     showMessage("Waiting for connection", list);
-                    connection = serverx.accept();
+                    if(checkSocketServer==false){
+                        
+                    }else{
+                    if(connection==null){
+                    connection = serverx.accept();}
+                    else{
+                    }}
                     while (true) {
                         
                         checkOutputRequest();
@@ -110,7 +116,7 @@ public class ServerClass {
         try{
            output.close();
            connection.close();
-          
+          thread = null;          
         }catch(Exception e){
             
         }
